@@ -120,8 +120,7 @@ function App() {
       border: 0,
     },
   }));
-  const addUser = (event) => {
-    event.preventDefault();
+  const addUser = () => {
     if (name && surname && age && salary) {
       let newUser = {
         id: uuidv1(),
@@ -212,38 +211,49 @@ function App() {
     pb: 3,
   };
 
-  const CreateModal = () => {
+  function CreateModal({
+    name,
+    setName,
+    age,
+    setAge,
+    surname,
+    setSurname,
+    salary,
+    setSalary,
+    open,
+    close,
+    submit,
+  }) {
     return (
       <div>
-        <Modal open={createOpen} onClose={() => setCreateOpen(false)}>
+        <Modal open={open} onClose={close}>
           <Box sx={{ ...style, width: 400 }} component="form">
             <Stack direction="column" spacing={6}>
               <TextField
                 value={name}
-                onChange={(event) => setName(event.target.value)}
                 sx={{ width: "150px" }}
                 label="Name"
+                onChange={(e) => setName(e.target.value)}
               />
               <TextField
                 value={surname}
                 sx={{ width: "150px" }}
-                onChange={(event) => setSurname(event.target.value)}
                 label="Surname"
+                onChange={(e) => setSurname(e.target.value)}
               />
               <TextField
                 value={salary}
-                onChange={(event) => setSalary(event.target.value)}
                 sx={{ width: "150px" }}
                 label="Salary"
+                onChange={(e) => setSalary(e.target.value)}
               />
               <TextField
                 value={age}
-                onChange={(event) => setAge(event.target.value)}
                 sx={{ width: "150px" }}
                 label="Age"
+                onChange={(e) => setAge(e.target.value)}
               />
               <Button
-                type="submit"
                 sx={{
                   bgcolor: "black",
                   color: "white",
@@ -253,8 +263,8 @@ function App() {
                   },
                 }}
                 onClick={() => {
-                  addUser();
-                  setCreateOpen(false);
+                  submit();
+                  close();
                 }}
               >
                 Add User
@@ -264,12 +274,12 @@ function App() {
         </Modal>
       </div>
     );
-  };
+  }
   const EditModal = () => {
     return (
       <div>
         <Modal open={editOpen} onClose={() => setEditOpen(false)}>
-          <Box sx={{ ...style, width: 400 }} component="form">
+          <Box sx={{ ...style, width: 400 }}>
             <Stack direction="column" spacing={6}>
               <TextField
                 value={updateName}
@@ -296,7 +306,6 @@ function App() {
                 label="Age"
               />
               <Button
-                type="submit"
                 sx={{
                   bgcolor: "black",
                   color: "white",
@@ -344,7 +353,19 @@ function App() {
           sx={{ color: "green" }}
           onClick={() => setCreateOpen(true)}
         />
-        <CreateModal />
+        <CreateModal
+          name={name}
+          setName={setName}
+          surname={surname}
+          setSurname={setSurname}
+          salary={salary}
+          setSalary={setSalary}
+          age={age}
+          setAge={setAge}
+          open={createOpen}
+          close={() => setCreateOpen(false)}
+          submit={() => addUser()}
+        />
         <EditModal />
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
